@@ -11,6 +11,7 @@ import {DemoMaterialModule} from './app/material-module';
 import {MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
 
 import {TableHttpExample} from './app/table-http-example';
+import { DialogComponent } from './app/dialog/dialog';
 
 // Default MatFormField appearance to 'fill' as that is the new recommended approach and the
 // `legacy` and `standard` appearances are scheduled for deprecation in version 10.
@@ -25,8 +26,8 @@ import {TableHttpExample} from './app/table-http-example';
     MatNativeDateModule,
     ReactiveFormsModule,
   ],
-  entryComponents: [TableHttpExample],
-  declarations: [TableHttpExample],
+  entryComponents: [TableHttpExample, DialogComponent],
+  declarations: [TableHttpExample, DialogComponent],
   bootstrap: [TableHttpExample],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } },

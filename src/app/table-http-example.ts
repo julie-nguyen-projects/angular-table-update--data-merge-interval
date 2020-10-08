@@ -4,6 +4,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {interval, merge, Observable, of as observableOf} from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from './dialog/dialog';
 
 /**
  * @title Table retrieving data through HTTP
@@ -17,7 +20,9 @@ export class TableHttpExample implements AfterViewInit {
   displayedColumns: string[] = ['created', 'state', 'number', 'title'];
   exampleDatabase: ExampleHttpDatabase | null;
   data: GithubIssue[] = [];
-  delay = 5000;
+  delay = 30000;
+
+  selection = new SelectionModel<GithubIssue>(false, []);
 
   resultsLength = 0;
   isLoadingResults = true;
@@ -26,13 +31,14 @@ export class TableHttpExample implements AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private _httpClient: HttpClient) {}
+  constructor(private _httpClient: HttpClient, private dialog: MatDialog,) {}
 
   ngAfterViewInit() {
     this.exampleDatabase = new ExampleHttpDatabase(this._httpClient);
 
     // If the user changes the sort order, reset back to the first page.
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    console.log('delay: ', this.delay);
 
     merge(this.sort.sortChange, this.paginator.page, interval(this.delay))
       .pipe(
@@ -57,6 +63,17 @@ export class TableHttpExample implements AfterViewInit {
           return observableOf([]);
         })
       ).subscribe(data => this.data = data);
+  }
+
+  selectRow(row: GithubIssue) {
+    this.selection.select(row);
+    this.delay = 10000000;
+
+    const dialogRef = this.dialog.open(DialogComponent);
+      dialogRef.afterClosed().subscribe(() => {
+        this.selection.clear();
+        this.delay = 30000;
+      });
   }
 }
 

@@ -42,3 +42,12 @@ table {
 .mat-column-created {
   max-width: 124px;
 }
+
+.mat-row.hovered {
+  background: #a6b0ba ;
+}
+
+mat-row.highlighted {
+  background: #33404b;
+}
+
